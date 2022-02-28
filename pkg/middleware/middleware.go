@@ -46,7 +46,7 @@ func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		logRequest(r)
 		if err := authenticateRequest(r); err != nil {
-			log.Printf("Authentication failed: %v", err)
+			log.Printf("Authentication failed: %s", err.Error())
 			http.Error(w, "Forbidden", http.StatusForbidden)
 		} else {
 			next.ServeHTTP(w, r)
