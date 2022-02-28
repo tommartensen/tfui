@@ -13,7 +13,7 @@ COPY cmd cmd
 
 COPY pkg pkg
 
-RUN go build -o /terraform_ui ./cmd
+RUN go build -o /tfui ./cmd
 
 FROM alpine:3.15 as app
 
@@ -27,6 +27,6 @@ RUN mkdir /user && \
 USER nobody:nobody
 
 COPY dist dist
-COPY --from=builder /terraform_ui .
+COPY --from=builder /tfui .
 
-CMD [ "./terraform_ui", "server" ]
+CMD [ "./tfui", "server" ]

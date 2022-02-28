@@ -19,8 +19,8 @@ var rootCmd = &cobra.Command{
 
 func currentConfig(cmd *cobra.Command, args []string) {
 	// TODO: implement based on env vars
-	fmt.Println("TERRAFORM_UI_ADDR=http://localhost:8080")
-	fmt.Println("TERRAFORM_UI_TOKEN=")
+	fmt.Println("TFUI_TOKEN_ADDR=http://localhost:8080")
+	fmt.Println("TFUI_TOKEN_TOKEN=")
 }
 
 func addConfigCommands(rootCmd *cobra.Command) {

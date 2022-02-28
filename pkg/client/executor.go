@@ -8,7 +8,7 @@ import (
 
 // TODO: use config for address
 // TODO: use application token from config
-var terraformUIAddr = "http://localhost:8080"
+var tfUiAddr = "http://localhost:8080"
 
 func RequestWithoutBody(method string, url string) (*http.Request, error) {
 	return http.NewRequest(method, url, nil)
@@ -19,7 +19,7 @@ func RequestWithBody(method string, url string, body []byte) (*http.Request, err
 }
 
 func Request(method string, uri string, body []byte) (*http.Response, error) {
-	url := fmt.Sprintf("%s/api/%s", terraformUIAddr, uri)
+	url := fmt.Sprintf("%s/api/%s", tfUiAddr, uri)
 	var req *http.Request
 	var err error
 
