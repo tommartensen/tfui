@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.server.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ .Values.server.maxUnavailable }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+      annotations:
+        prometheus.io/scrape-slow: "true"
+    spec:
+      initContainers:
+        - image: {{ .Values.images.tags.initServer }}
+          name: init-chmod-data
+          command: ["/bin/chown", "-R", "{{ .Values.server.user.uid }}:{{ .Values.server.user.gid }}", "/plans"]
+          volumeMounts:
+          - mountPath: /plans
+            name: {{ .Release.Name }}-volume
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.server }}
+        imagePullPolicy: {{ .Values.image.pullPolicy}}
+        ports:
+        - name: http
+          containerPort: {{ .Values.server.containerPort }}
+        volumeMounts:
+        - name: {{ .Release.Name }}-volume
+          mountPath: /plans
+      imagePullSecrets:
+      - name: {{ .Values.image.pullSecret }}
+      volumes:
+        - name: {{ .Release.Name }}-volume
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-claim

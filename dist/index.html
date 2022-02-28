@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta>
+      <!-- Required Stylesheets -->
+      <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+      <link type="text/css" rel="stylesheet" href="./static/bootstrap-vue.css" />
+      <link type="text/css" rel="stylesheet" href="/static/style.css" />
+    </meta>
+</head>
+
+<body>
+  <div id="content">
+  </div>
+  <script src="https://unpkg.com/vue@2"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="./static/bootstrap-vue.js"></script>
+  <script>
+    new Vue({
+      el: '#content',
+      data: {
+        selected: null,
+        options: [
+                  {value: null, text: "Select a state"},
+                  {value: "error", text: "Error"},
+                  {value: "no change", text: "No change"},
+                  {value: "create", text: "Create"},
+                  {value: "update", text: "Update"},
+                  {value: "delete", text: "Delete"},
+                 ],
+        search: "",
+        plans: [],
+      },
+      mounted() {
+        axios.get("/api/plan/summary")
+          .then((response) => {
+            response.data.forEach(plan => {
+              this.plans.push({ plannedChanges: plan.plannedChanges, meta: plan.meta, state: plan.state, id: Math.random() })
+            });
+          });
+      },
+      methods: {
+        reset() {
+          this.selected = null
+          this.search = ""
+        },
+      },
+      filters: {
+        capitalize: function (value) {
+          if (!value) return ""
+          value = value.toString()
+          return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+      },
+      computed: {
+        filteredPlans() {
+          if (this.search.length === 0 && this.selected === null) {
+            return this.plans
+          } else {
+            return this.plans.filter(plan => {
+              match = true
+              if (this.search.length > 0) {
+                match = plan.meta.project.includes(this.search)
+              }
+              if (this.selected != null) {
+                match = match && plan.state == this.selected
+              }
+              return match
+            })
+          }
+        }
+      },
+      template: `
+            <div>
+              <div>
+                <b-navbar type="dark" variant="primary">
+                  <b-navbar-brand href="#" class="p-2">TerraformUI</b-navbar-brand>
+                </b-navbar>
+              </div>
+              <div class="d-flex flex-row ">
+                <div class="p-2">
+                  <input class="form-control" v-model="search" placeholder="Project" />
+                </div>
+                <div class="p-2">
+                  <b-form-select class="form-control" v-model="selected" :options="options"></b-form-select>
+                </div>
+                <div class="p-2">
+                  <button class="form-control btn-primary" v-on:click="reset()">Reset</button>
+                </div>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Region</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Workspace</th>
+                    <th scope="col">Version</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="plan in filteredPlans">
+                    <td>
+                      <b-button v-b-toggle="'test-'+plan.id"><span class="glyphicon glyphicon-plus"></span>+</b-button>
+                      <b-collapse :id="'test-'+plan.id">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Actions</th>
+                              <th scope="col">Resource Count</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="(value, name) in plan.plannedChanges">
+                              <td scope="row">{{ name | capitalize }}</td>
+                              <td>{{ value }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </b-collapse>
+                    </td>
+                    <td class="align-middle">{{ plan.meta.region }}</td>
+                    <td class="align-middle">{{ plan.meta.project }}</td>
+                    <td class="align-middle">{{ plan.meta.workspace }}</td>
+                    <td class="align-middle">{{ plan.meta.commit_id }}</td>
+                    <td class="align-middle">{{ plan.state | capitalize }}</td>
+                    <td class="align-middle">{{ plan.meta.date }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            `
+    })
+  </script>
+</body>
+</html>

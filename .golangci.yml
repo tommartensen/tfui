@@ -1,0 +1,97 @@
+run:
+  deadline: 5m
+
+  skip-dirs:
+    - dist
+    - jenkinsfile
+    - plans
+    - test
+    - vendor
+
+linters-settings:
+  funlen:
+    lines: 60
+    statements: 40
+  gocyclo:
+    # minimal code complexity to report, 30 by default (but we recommend 10-20)
+    min-complexity: 10
+  gocognit:
+    # minimal code complexity to report, 30 by default (but we recommend 10-20)
+    min-complexity: 10
+  goimports:
+    # put imports beginning with prefix after 3rd-party packages;
+    # it's a comma-separated list of prefixes
+    local-prefixes: github.com/tommartensen/
+  golint:
+    # minimal confidence for issues, default is 0.8
+    min-confidence: 0
+  gosec:
+    severity: medium
+  lll:
+    # max line length, lines longer will be reported. Default is 120.
+    # '\t' is counted as 1 character by default, and can be changed with the tab-width option
+    line-length: 140
+
+linters:
+  disable-all: true
+  enable:
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    - dupl
+    - exportloopref
+    # - errcheck
+    - funlen
+    # - gochecknoglobals
+    # - gochecknoinits
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - godox
+    - gofmt
+    - goimports
+    - golint
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - sqlclosecheck
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - whitespace
+
+  # not enabled: (check with `golangci-lint linters` command)
+  # - gomnd
+  # - maligned
+  # - prealloc
+  # - wsl
+
+issues:
+  exclude-rules:
+    # Exclude test functions from function length rule
+    - source: "Test.*"
+      linters:
+        - funlen
+        - gocognit
+
+    - path: _test\.go
+      linters:
+        - lll
+        - gosec
+
+  # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
+  max-issues-per-linter: 0
+
+  # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
+  max-same-issues: 0
