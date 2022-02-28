@@ -38,7 +38,7 @@ func authenticateRequest(r *http.Request) error {
 }
 
 func logRequest(r *http.Request) {
-	log.Printf("Received call [%s] %s\n", r.Method, r.URL.Path)
+	log.Printf("Received call [%s] %s\n", r.Method, strings.Replace(r.URL.Path, "\n", "", -1))
 }
 
 // Middleware function called for each request
