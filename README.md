@@ -1,5 +1,7 @@
 # TFUI
 
+:warning: This is a WIP and helps us to learn Go, so please advice on any best practices and ignore bugs (or even submit issues or pull requests).
+
 `tfui` is a server and command line client to review [Hashicorp Terraform](https://www.terraform.io/) plans in a succinct manner.
 Plans can be uploaded with a CLI and seen on a browser.
 
