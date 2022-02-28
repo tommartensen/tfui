@@ -69,4 +69,4 @@ tfui plan upload -f infraplan.json
 
 ### Architecture
 
-![Terraform UI Architecture](docs/terraform-ui-architecture.drawio.png "TFUI Architecture and Flow")
+![TFUI Architecture](./docs/tfui-architecture.drawio.png "TFUI Architecture and Flow")
