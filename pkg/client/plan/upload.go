@@ -51,8 +51,11 @@ func UploadPlan(cmd *cobra.Command, args []string) {
 	}
 
 	resp, err := client.Request(http.MethodPost, "plan", body)
+
 	if err != nil {
-		resp.Body.Close()
+		if resp != nil {
+			resp.Body.Close()
+		}
 		log.Fatalln(fmt.Errorf("plan upload failed: %v", err))
 	}
 	if resp.StatusCode != http.StatusCreated {
