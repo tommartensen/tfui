@@ -17,9 +17,10 @@ server:
     enabled: false
     host: ''
     ingressClassName: ''
-    annotations: []
+    annotations: {}
     tls: []
   persistence:
     enabled: false
     storageClass: ''
     capacity: ''
+  applicationToken: ''

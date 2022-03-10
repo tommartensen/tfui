@@ -37,6 +37,11 @@ spec:
         volumeMounts:
         - name: {{ .Release.Name }}-volume
           mountPath: /plans
+{{- if .Values.server.applicationToken }}
+        envFrom:
+          - secretRef:
+              name: {{ .Release.Name }}-application-token
+{{- end }}
       volumes:
         - name: {{ .Release.Name }}-volume
 {{- if .Values.server.persistence.enabled }}

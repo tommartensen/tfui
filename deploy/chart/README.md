@@ -1,5 +1,8 @@
 # Deploying TFUI with Helm
 
+This directory is a full-fledged Helm chart.
+The Make target `helm-deploy` from the repository's root directory will deploy a Helm release.
+
 ## Configuration
 
 The default configuration does not make the service available over an Ingress, and does not configure persistent volumes.

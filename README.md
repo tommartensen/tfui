@@ -11,8 +11,9 @@ The full architectural documentation lives in [docs/](./docs/).
 
 ### Server
 
-The server can also be deployed with our [Helm chart](./deploy/chart/).
-Environment variables available are:
+The server can be deployed with our [Helm chart](./deploy/chart/).
+
+For the configuration of the server, environment variables are available:
 
 - `APPLICATION_TOKEN` to authenticate to the API (default: not set)
 - `BASE_DIR` as the directory of the plan file storage (default: `./plans`)
