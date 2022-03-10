@@ -21,7 +21,7 @@ func buildPlanMeta() models.TfPlanMeta {
 		Project:   os.Getenv("PROJECT"),
 		Workspace: os.Getenv("WORKSPACE"),
 		Date:      util.GetCurrentDatetime(),
-		CommitID:  util.GetCommitId(),
+		CommitID:  util.GetCommitID(),
 	}
 }
 
@@ -52,7 +52,7 @@ func UploadPlan(cmd *cobra.Command, args []string) {
 
 	resp, err := client.Request(http.MethodPost, "plan", body)
 	if err != nil {
-		// resp.Body.Close()
+		resp.Body.Close()
 		log.Fatalln(fmt.Errorf("plan upload failed: %v", err))
 	}
 	if resp.StatusCode != http.StatusCreated {

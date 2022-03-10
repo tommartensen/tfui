@@ -7,6 +7,7 @@ import (
 
 	"github.com/tommartensen/tfui/pkg/client/plan"
 	"github.com/tommartensen/tfui/pkg/client/system"
+	"github.com/tommartensen/tfui/pkg/config"
 	"github.com/tommartensen/tfui/pkg/server"
 )
 
@@ -18,9 +19,9 @@ var rootCmd = &cobra.Command{
 }
 
 func currentConfig(cmd *cobra.Command, args []string) {
-	// TODO: implement based on env vars
-	fmt.Println("TFUI_TOKEN_ADDR=http://localhost:8080")
-	fmt.Println("TFUI_TOKEN_TOKEN=")
+	configuration := config.New()
+	fmt.Printf("Server Address: %s\n", configuration.Addr)
+	fmt.Printf("Client Token:   %s\n", configuration.ClientToken)
 }
 
 func addConfigCommands(rootCmd *cobra.Command) {

@@ -31,14 +31,14 @@ func authenticateRequest(r *http.Request) error {
 	}
 
 	cfg := config.New()
-	if string(token) != cfg.ApplicationToken {
+	if string(token) != cfg.ServerToken {
 		return errors.New("secret mismatch")
 	}
 	return nil
 }
 
 func logRequest(r *http.Request) {
-	log.Printf("Received call [%s] %s\n", r.Method, strings.Replace(r.URL.Path, "\n", "", -1))
+	log.Printf("Received call [%s] %s\n", r.Method, strings.ReplaceAll(r.URL.Path, "\n", ""))
 }
 
 // Middleware function called for each request

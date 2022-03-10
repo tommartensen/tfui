@@ -48,7 +48,7 @@ func GetCurrentDatetime() string {
 	return currentTime.Format("2006-01-02 15:04:05")
 }
 
-func GetCommitId() string {
+func GetCommitID() string {
 	out, err := exec.Command("git", "rev-parse", "HEAD").Output()
 	if err != nil {
 		log.Fatal(err)
