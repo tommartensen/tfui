@@ -1,17 +1,19 @@
----
+{{- if .Values.server.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+{{- if .Values.server.ingress.annotations }}
   annotations:
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/ingressClassName: nginx
+{{ toYaml .Values.server.ingress.annotations | indent 4 }}
+{{- end }}
   labels:
     app: {{ .Release.Name }}
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
+  ingressClassName: {{ .Values.server.ingress.ingressClassName }}
   rules:
-  - host: {{ .Values.server.ingress.domain }}
+  - host: {{ .Values.server.ingress.host }}
     http:
       paths:
       - backend:
@@ -21,6 +23,8 @@ spec:
               number: {{ .Values.server.containerPort }}
         path: /
         pathType: Prefix
+{{- if .Values.server.ingress.tls }}
   tls:
-  - hosts:
-    - {{ .Values.server.ingress.domain }}
+{{ toYaml .Values.server.ingress.tls | indent 4 }}
+{{- end -}}
+{{- end -}}

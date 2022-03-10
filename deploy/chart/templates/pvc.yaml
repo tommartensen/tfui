@@ -1,12 +1,13 @@
----
+{{- if .Values.server.persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Release.Name }}-claim
 spec:
-  storageClassName: {{ .Values.persistence.storageClass }}
+  storageClassName: {{ .Values.server.persistence.storageClass }}
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 100Mi
+      storage: {{ .Values.server.persistence.capacity }}
+{{- end -}}
