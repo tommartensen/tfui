@@ -23,6 +23,11 @@ tfui server
 
 ### Client
 
+Environment variables available are:
+
+- `TFUI_ADDR` as location of the TFUI server (default: `http://localhost:8080`)
+- `TFUI_TOKEN` to authenticate to the API (default: not set)
+
 ```bash
 tfui is a tool to manage the Terraform UI server, e.g. upload plans, or reset the server.
 

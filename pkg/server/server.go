@@ -40,7 +40,7 @@ func (a *Server) Initialize() {
 	api.HandleFunc("/plan/summary/by-params", handler.GetPlanSummary).
 		Methods("GET").
 		Queries("region", "{region}", "project", "{project}", "workspace", "{workspace}")
-	if len(a.Config.ApplicationToken) > 0 {
+	if len(a.Config.ServerToken) > 0 {
 		api.Use(middleware.Middleware)
 	}
 	a.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("./dist")))

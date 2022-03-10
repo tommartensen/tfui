@@ -2,13 +2,12 @@ package client
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"net/http"
-)
 
-// TODO: use config for address
-// TODO: use application token from config
-var tfUiAddr = "http://localhost:8080"
+	"github.com/tommartensen/tfui/pkg/config"
+)
 
 func RequestWithoutBody(method string, url string) (*http.Request, error) {
 	return http.NewRequest(method, url, nil)
@@ -19,7 +18,8 @@ func RequestWithBody(method string, url string, body []byte) (*http.Request, err
 }
 
 func Request(method string, uri string, body []byte) (*http.Response, error) {
-	url := fmt.Sprintf("%s/api/%s", tfUiAddr, uri)
+	configuration := config.New()
+	url := fmt.Sprintf("%s/api/%s", configuration.Addr, uri)
 	var req *http.Request
 	var err error
 
@@ -31,6 +31,10 @@ func Request(method string, uri string, body []byte) (*http.Response, error) {
 	if err != nil {
 		return &http.Response{}, err
 	}
+	if len(configuration.ClientToken) > 0 {
+		b64EncodedClientToken := base64.StdEncoding.EncodeToString([]byte(configuration.ClientToken))
+		bearer := fmt.Sprintf("Bearer %s", b64EncodedClientToken)
+		req.Header.Add("Authorization", bearer)
+	}
 	return http.DefaultClient.Do(req)
-
 }

@@ -11,7 +11,7 @@ import (
 
 func TestNewDefaultConfiguration(t *testing.T) {
 	c := config.New()
-	assert.Equal(t, c.ApplicationToken, "")
+	assert.Equal(t, c.ServerToken, "")
 	assert.Equal(t, c.BaseDir, "./plans")
 	assert.Equal(t, c.Port, "8080")
 }
@@ -25,7 +25,7 @@ func TestConfigurationWithEnvironment(t *testing.T) {
 	defer os.Unsetenv("PORT")
 
 	c := config.New()
-	assert.Equal(t, c.ApplicationToken, "testtoken")
+	assert.Equal(t, c.ServerToken, "testtoken")
 	assert.Equal(t, c.BaseDir, "./test/plans")
 	assert.Equal(t, c.Port, "4000")
 }
