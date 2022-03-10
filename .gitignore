@@ -3,6 +3,7 @@
 
 # Golang
 vendor/
+build/
 
 # Application specific
 plans/
