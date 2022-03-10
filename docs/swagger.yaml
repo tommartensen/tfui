@@ -1,0 +1,276 @@
+---
+swagger: "2.0"
+info:
+  description: "TFUI integrates with your Terraform workflow to graphically display planned changes"
+  version: "0.0.1"
+  title: "TFUI"
+  license:
+    name: "MIT License"
+    url: "https://github.com/tommartensen/tfui/blob/master/LICENSE"
+host: "localhost:8080"
+basePath: "/api"
+tags:
+- name: "plan"
+  description: "Everything related to uploading and viewing plans"
+- name: "health"
+  description: "Everything about system health"
+- name: "reset"
+  description: "Everything about system resets"
+schemes:
+- "https"
+- "http"
+paths:
+  /plan:
+    get:
+      tags:
+      - "plan"
+      summary: "Get all plans"
+      description: ""
+      operationId: "getPlans"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TfPlan"
+    post:
+      tags:
+      - "plan"
+      summary: "Upload a new plan or overwrite and existing one with same region, project and workspace"
+      description: ""
+      operationId: "uploadPlan"
+      consumes:
+      - "application/json"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Invalid format"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Plan object that should be uploaded and saved"
+        required: true
+        schema:
+          $ref: "#/definitions/TfPlan"
+  /plan/by-params:
+    get:
+      tags:
+      - "plan"
+      summary: "Gets a Plan by params"
+      description: "The region, project and workspace need to be provided to get the plan"
+      operationId: "getPlanByParams"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "region"
+        in: "query"
+        description: "Region the plan was made for"
+        required: true
+        type: "string"
+      - name: "project"
+        in: "query"
+        description: "Project the plan was made for"
+        required: true
+        type: "string"
+      - name: "workspace"
+        in: "query"
+        description: "Workspace the plan was made for"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TfPlan"
+        "404":
+          description: "Not found"
+    delete:
+      tags:
+      - "plan"
+      summary: "Deletes a Plan by params"
+      description: "The region, project and workspace need to be provided to delete the plan"
+      operationId: "deletePlanByParams"
+      parameters:
+      - name: "region"
+        in: "query"
+        description: "Region the plan was made for"
+        required: true
+        type: "string"
+      - name: "project"
+        in: "query"
+        description: "Project the plan was made for"
+        required: true
+        type: "string"
+      - name: "workspace"
+        in: "query"
+        description: "Workspace the plan was made for"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+  /plan/summary:
+    get:
+      tags:
+      - "plan"
+      summary: "Get summary of all plans"
+      description: ""
+      operationId: "getPlansSummary"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TfPlanSummary"
+  /plan/summary/by-params:
+    get:
+      tags:
+      - "plan"
+      summary: "Gets a Plan summary by params"
+      description: "The region, project and workspace need to be provided to get the plan summary"
+      operationId: "getPlanSummaryByParams"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "region"
+        in: "query"
+        description: "Region the plan was made for"
+        required: true
+        type: "string"
+      - name: "project"
+        in: "query"
+        description: "Project the plan was made for"
+        required: true
+        type: "string"
+      - name: "workspace"
+        in: "query"
+        description: "Workspace the plan was made for"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TfPlanSummary"
+        "404":
+          description: "Not found"
+  /health:
+    get:
+      tags:
+      - "health"
+      summary: "Gets information about system health"
+      description: ""
+      operationId: "healthSystem"
+      responses:
+        "200":
+          description: "System is healthy"
+  /reset:
+    delete:
+      tags:
+      - "reset"
+      summary: "Resets the system by wiping the plan storage"
+      description: ""
+      operationId: "resetSystem"
+      responses:
+        "200":
+          description: "Successful operation"
+
+definitions:
+  TfPlan:
+    type: "object"
+    properties:
+      format_version:
+        type: "string"
+      terraform_version:
+        type: "string"
+      resource_changes:
+        type: "array"
+        items:
+          $ref: "#/definitions/resourceChange"
+      meta:
+        $ref: "#/definitions/TfPlanMeta"
+  TfPlanSummary:
+    type: "object"
+    properties:
+      meta:
+        $ref: "#/definitions/TfPlanMeta"
+      plannedChanges:
+        $ref: "#/definitions/PlannedChanges"
+      state:
+        type: "string"
+        enum:
+        - "create"
+        - "delete"
+        - "update"
+        - "no change"
+        - "error"
+  TfPlanMeta:
+    type: "object"
+    properties:
+      region:
+        type: "string"
+      project:
+        type: "string"
+      workspace:
+        type: "string"
+      date:
+        type: "string"
+        format: "date-time"
+      commit_id:
+        type: "string"
+
+  PlannedChanges:
+    type: "object"
+    properties:
+      create:
+        type: "integer"
+      delete:
+        type: "integer"
+      no-op:
+        type: "integer"
+      update:
+        type: "integer"
+
+  resourceChange:
+    type: "object"
+    properties:
+      address:
+        type: "string"
+      mode:
+        type: "string"
+      type:
+        type: "string"
+      name:
+        type: "string"
+      provider_name:
+        type: "string"
+      change:
+        $ref: "#/definitions/change"
+  change:
+    type: "object"
+    properties:
+      actions:
+        type: "array"
+        items:
+          type: "string"
+      before:
+        type: "object"
+      after:
+        type: "object"
+      after_unknown:
+        type: "object"
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

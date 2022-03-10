@@ -5,15 +5,17 @@
 `tfui` is a server and command line client to review [Hashicorp Terraform](https://www.terraform.io/) plans in a succinct manner.
 Plans can be uploaded with a CLI and seen on a browser.
 
+The full architectural documentation lives in [docs/](./docs/README.md).
+
 ## Usage
 
 ### Server
 
 Environment variables available are:
 
--`APPLICATION_TOKEN` to authenticate to the API (default: not set)
--`BASE_DIR` as the directory of the plan file storage (default: `./plans`)
--`PORT` for which port the application should run on (default: `8080`)
+- `APPLICATION_TOKEN` to authenticate to the API (default: not set)
+- `BASE_DIR` as the directory of the plan file storage (default: `./plans`)
+- `PORT` for which port the application should run on (default: `8080`)
 
 ```bash
 tfui server
@@ -68,7 +70,3 @@ tfui plan upload -f infraplan.json
 | `docker-build` | Build docker container                               |
 | `docker-run`   | Run docker container                                 |
 | `helm-deploy`  | Deploys the Helm chart into a K8s cluster            |
-
-### Architecture
-
-![TFUI Architecture](./docs/tfui-architecture.drawio.png "TFUI Architecture and Flow")
