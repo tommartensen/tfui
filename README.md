@@ -13,9 +13,9 @@ The full architectural documentation lives in [docs/](./docs/README.md).
 
 Environment variables available are:
 
--`APPLICATION_TOKEN` to authenticate to the API (default: not set)
--`BASE_DIR` as the directory of the plan file storage (default: `./plans`)
--`PORT` for which port the application should run on (default: `8080`)
+- `APPLICATION_TOKEN` to authenticate to the API (default: not set)
+- `BASE_DIR` as the directory of the plan file storage (default: `./plans`)
+- `PORT` for which port the application should run on (default: `8080`)
 
 ```bash
 tfui server
