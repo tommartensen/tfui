@@ -5,12 +5,13 @@
 `tfui` is a server and command line client to review [Hashicorp Terraform](https://www.terraform.io/) plans in a succinct manner.
 Plans can be uploaded with a CLI and seen on a browser.
 
-The full architectural documentation lives in [docs/](./docs/README.md).
+The full architectural documentation lives in [docs/](./docs/).
 
 ## Usage
 
 ### Server
 
+The server can also be deployed with our [Helm chart](./deploy/chart/).
 Environment variables available are:
 
 - `APPLICATION_TOKEN` to authenticate to the API (default: not set)

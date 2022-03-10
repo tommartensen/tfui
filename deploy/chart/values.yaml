@@ -1,21 +1,25 @@
 ---
 images:
-  tags:
+  names:
     initServer: alpine:3.15
     server: tommartensen/tfui:0.0.1
   pullPolicy: Always
-
-persistence:
-  storageClass: csi-sc-cinderplugin
-  storageSize: 100Mi
 
 server:
   containerPort: 8080
   user:
     uid: 65534
     gid: 65534
-  ingress:
-    domain: tfui.local
   deploy:
-    replicas: 2
+    replicas: 1
     maxUnavailable: 1
+  ingress:
+    enabled: false
+    host: ''
+    ingressClassName: ''
+    annotations: []
+    tls: []
+  persistence:
+    enabled: false
+    storageClass: ''
+    capacity: ''

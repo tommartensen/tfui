@@ -5,11 +5,11 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.server.replicas }}
+  replicas: {{ .Values.server.deploy.replicas }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: {{ .Values.server.maxUnavailable }}
+      maxUnavailable: {{ .Values.server.deploy.maxUnavailable }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -17,29 +17,31 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-      annotations:
-        prometheus.io/scrape-slow: "true"
     spec:
+{{- if .Values.server.persistence.enabled }}
       initContainers:
-        - image: {{ .Values.images.tags.initServer }}
+        - image: {{ .Values.images.names.initServer }}
           name: init-chmod-data
           command: ["/bin/chown", "-R", "{{ .Values.server.user.uid }}:{{ .Values.server.user.gid }}", "/plans"]
           volumeMounts:
           - mountPath: /plans
             name: {{ .Release.Name }}-volume
+{{- end }}
       containers:
       - name: {{ .Chart.Name }}
-        image: {{ .Values.image.server }}
-        imagePullPolicy: {{ .Values.image.pullPolicy}}
+        image: {{ .Values.images.names.server }}
+        imagePullPolicy: {{ .Values.images.pullPolicy}}
         ports:
         - name: http
           containerPort: {{ .Values.server.containerPort }}
         volumeMounts:
         - name: {{ .Release.Name }}-volume
           mountPath: /plans
-      imagePullSecrets:
-      - name: {{ .Values.image.pullSecret }}
       volumes:
         - name: {{ .Release.Name }}-volume
+{{- if .Values.server.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-claim
+{{- else }}
+          emptyDir: {}
+{{- end -}}
