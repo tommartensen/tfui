@@ -5,6 +5,8 @@
 `tfui` is a server and command line client to review [Hashicorp Terraform](https://www.terraform.io/) plans in a succinct manner.
 Plans can be uploaded with a CLI and seen on a browser.
 
+The full architectural documentation lives in [docs/](./docs/README.md).
+
 ## Usage
 
 ### Server
@@ -68,7 +70,3 @@ tfui plan upload -f infraplan.json
 | `docker-build` | Build docker container                               |
 | `docker-run`   | Run docker container                                 |
 | `helm-deploy`  | Deploys the Helm chart into a K8s cluster            |
-
-### Architecture
-
-![TFUI Architecture](./docs/tfui-architecture.drawio.png "TFUI Architecture and Flow")
