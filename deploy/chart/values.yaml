@@ -17,5 +17,5 @@ server:
   ingress:
     domain: tfui.local
   deploy:
-    replicas: 1
+    replicas: 2
     maxUnavailable: 1
