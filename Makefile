@@ -1,4 +1,4 @@
-.PHONY: test
+.PHONY: test build
 
 APP_NAME := tfui
 PLATFORMS := darwin linux
@@ -7,7 +7,7 @@ ARCHS := amd64 arm64
 build: ## Build binary for your OS and architecture
 	go build -o ./build/${APP_NAME} ./cmd
 
-clean:
+clean: ## Clean up the build folder
 	@-rm -r ./build
 
 format: ## Auto-format the code to conform with common Go style
@@ -19,7 +19,7 @@ lint: ## Run the linter to enforce best practices
 test: ## Run all tests
 	go test ./...
 
-release: clean go-release go-checksums
+release: clean go-release go-checksums ## Cross-compile binaries and create checksums
 
 docker-build: ## Build docker container
 	docker build . -t tommartensen/${APP_NAME}:0.0.1
@@ -30,7 +30,7 @@ docker-run: ## Run docker container
 go-vendor: ## Get dependencies
 	go mod vendor
 
-go-release: go-vendor ## cross compile command which can also be used on host without docker and also creates checksums
+go-release: go-vendor ## Cross-compile with native Go methods
 	@for GOOS in ${PLATFORMS}; do \
 	  for GOARCH in ${ARCHS}; do \
 	  	export GOOS=$$GOOS; \
@@ -39,7 +39,7 @@ go-release: go-vendor ## cross compile command which can also be used on host wi
 	  done \
 	done
 
-go-checksums:
+go-checksums: ## Create checksum file
 	@-rm -f ./build/SHA256SUMS
 	cd ./build/ && sha256sum * > SHA256SUMS
 
