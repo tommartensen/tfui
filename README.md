@@ -74,6 +74,7 @@ tfui plan upload -f infraplan.json
 | `format`       | Auto-format the code to conform with common Go style |
 | `lint`         | Run the linter to enforce best practices             |
 | `test`         | Run all tests                                        |
+| `release`      | Cross-compile the binary for OS X and Linux          |
 | `docker-build` | Build docker container                               |
 | `docker-run`   | Run docker container                                 |
 | `helm-deploy`  | Deploys the Helm chart into a K8s cluster            |
